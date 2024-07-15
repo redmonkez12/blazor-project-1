@@ -1,7 +1,5 @@
 @page "/assets"
-@page "/assets/{categoryId:int}"
-
-@inject NavigationManager NavigationManager
+@page "/assets/category/{categoryId:int}"
 
 <div class="row">
     <h3 class="mb-3">Assets</h3>
@@ -15,7 +13,7 @@
     <div class="hstack gap-4 mb-3">
         @foreach (var category in _categories)
         {
-            <button class="btn btn-primary" @onclick="() => SelectCategory(category.CategoryId)">@category.Name</button>   
+            <a href="@($"/assets/category/{category.CategoryId}")" class="btn btn-primary">@category.Name</a>  
         }
     </div>
     
@@ -49,8 +47,4 @@
         }
     }
     
-    private void SelectCategory(int id)
-    {
-        NavigationManager.NavigateTo($"/assets/{id}");
-    }
 }
