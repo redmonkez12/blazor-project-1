@@ -19,7 +19,7 @@ public class AssetsRepository
 
     public static List<Asset> GetAssets() => _assets;
 
-    public static List<Asset> GetAssetByCategory(int categoryId)
+    public static List<Asset> GetAssetsByCategory(int categoryId)
     {
         return _assets.Where(a => a.CategoryId == categoryId).ToList();
     }
@@ -46,11 +46,6 @@ public class AssetsRepository
         {
             _assets.Remove(asset);
         }
-    }
-
-    public static List<Asset> SearchAssets(string asset)
-    {
-        return _assets.Where(a => a.Name.Contains(asset, StringComparison.OrdinalIgnoreCase)).ToList();
     }
 
     public static Asset? GetAssetById(int id)
