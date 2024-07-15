@@ -39,7 +39,7 @@
     {
         if (CategoryId.HasValue)
         {
-            _filteredAssets = _assets.Where(a => a.CategoryId == CategoryId.Value).ToList();
+            _filteredAssets = AssetsRepository.GetAssetsByCategory((int)CategoryId);
         }
         else
         {
