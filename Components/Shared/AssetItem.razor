@@ -1,0 +1,49 @@
+@inject NavigationManager NavigationManager
+
+<div class="card" style="width: 18rem;">
+    <div class="px-4 pt-4 d-flex justify-content-center">
+        <img src="@($"/images/{GetImageName(Asset.Name)}.png")" alt="Logo" width="80">
+    </div>
+
+    <div class="card-body vstack gap-4">
+        <div>
+            <div>Name: @Asset.Name</div>
+            <div>Price: @Asset.Price</div>
+        </div>
+
+        <div class="d-grid mt-auto gap-2">
+            <a href="/assets/@Asset.AssetId" class="btn btn-primary">Edit</a>
+            <EditForm Model="Asset" FormName="@($"form-asset-{Asset.AssetId}")" OnValidSubmit="@(() => { DeleteAsset(Asset.AssetId);})">
+                <button type="submit" class="btn btn-danger w-100">Delete</button>
+            </EditForm>
+        </div>
+    </div>
+</div>
+
+@code {
+    [Parameter]
+    public required Asset Asset { get; set; }
+
+    private string GetImageName(string input)
+    {
+        if (string.IsNullOrEmpty(input))
+        {
+            return input;
+        }
+
+        // Replace spaces with underscores
+        var snakeCase = input.Replace(" ", "_").ToLower();
+
+        return snakeCase;
+    }
+
+    private void DeleteAsset(int assetId)
+    {
+        if (assetId > 0)
+        {
+            AssetsRepository.DeleteAsset(assetId);
+            NavigationManager.Refresh();
+        }
+    }
+
+}

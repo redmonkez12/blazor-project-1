@@ -1,0 +1,31 @@
+@page "/assets"
+
+<div class="row">
+    <h3 class="mb-3">Assets</h3>
+
+    <div class="row mb-3">
+        <div class="col-12 col-md-3">
+            <a href="/assets/add" class="btn btn-secondary">Add Asset</a>  
+        </div>
+    </div>
+    
+    <div class="hstack gap-4 mb-3">
+        @foreach (var category in _categories)
+        {
+            <button class="btn btn-primary">@category.Name</button>   
+        }
+    </div>
+    
+    <div class="col-4 d-flex gap-4 flex-wrap w-100">
+        @foreach (var asset in _assets)
+        {
+            <AssetItem Asset="asset"/>   
+        }
+    </div>
+</div>
+
+@code {
+    private readonly List<Asset> _assets = AssetsRepository.GetAssets();
+    
+    private readonly List<Category> _categories = CategoriesRepository.GetCategories();
+}

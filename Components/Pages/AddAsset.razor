@@ -1,0 +1,67 @@
+@page "/assets/add"
+
+@inject NavigationManager NavigationManager
+
+<h3>Add asset</h3>
+
+<EditForm Model="Asset" FormName="formAsset" OnValidSubmit="Submit">
+    <DataAnnotationsValidator/>
+
+    <InputNumber @bind-Value="Asset.AssetId" hidden></InputNumber>
+
+    <div class="row mb-3">
+        <div class="col-2">
+            <label for="" class="col-form-label">Name</label>
+        </div>
+
+        <div class="col-6">
+            <InputText @bind-Value="Asset.Name" class="form-control"/>
+            <ValidationMessage For="() => Asset.Name"/>
+        </div>
+    </div>
+
+    <div class="row mb-3">
+        <div class="col-2">
+            <label for="" class="col-form-label">Price</label>
+        </div>
+
+        <div class="col-6">
+            <InputNumber @bind-Value="Asset.Price" class="form-control"/>
+            <ValidationMessage For="() => Asset.Price"/>
+        </div>
+    </div>
+
+    <div class="row mb-3">
+        <div class="col-2">
+            <label for="category" class="col-form-label">Category</label>
+        </div>
+
+        <div class="col-6">
+            <InputSelect @bind-Value="Asset.CategoryId" id="category" class="form-control">
+                <option value="">Select a category</option>
+                @foreach (var category in _categories)
+                {
+                <option value="@category.CategoryId">@category.Name</option>
+                }
+            </InputSelect>
+            <ValidationMessage For="() => Asset.CategoryId"/>
+        </div>
+    </div>
+
+    <button class="btn btn-primary" type="submit">Add</button>
+    <a href="/assets" class="btn btn-primary">Back</a>
+</EditForm>
+
+@code {
+    [SupplyParameterFromForm]
+    private Asset Asset { get; set; } = new();
+
+    private readonly List<Category> _categories = CategoriesRepository.GetCategories();
+
+    private void Submit()
+    {
+        AssetsRepository.AddAsset(Asset);
+        NavigationManager.NavigateTo("/assets");
+    }
+
+}

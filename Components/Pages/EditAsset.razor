@@ -1,0 +1,68 @@
+@page "/assets/{id:int}"
+@inject NavigationManager NavigationManager
+
+<h3 class="mb-3">Edit Asset</h3>
+
+@if (Asset != null)
+{
+    <EditForm Model="Asset" FormName="formAsset" OnValidSubmit="Submit">
+        <DataAnnotationsValidator/>
+
+        <InputNumber @bind-Value="Asset.AssetId" hidden></InputNumber>
+        <InputNumber @bind-Value="Asset.CategoryId" hidden></InputNumber>
+
+        <div class="row mb-3">
+            <div class="col-2">
+                <label for="" class="col-form-label">Name</label>
+            </div>
+
+            <div class="col-6">
+                <InputText @bind-Value="Asset.Name" class="form-control"/>
+                <ValidationMessage For="() => Asset.Name"/>
+            </div>
+        </div>
+
+        <div class="row mb-3">
+            <div class="col-2">
+                <label for="" class="col-form-label">Price</label>
+            </div>
+
+            <div class="col-6">
+                <InputNumber @bind-Value="Asset.Price" class="form-control"/>
+                <ValidationMessage For="() => Asset.Price"/>
+            </div>
+        </div>
+
+        <button class="btn btn-primary" type="submit">Update</button>
+        <a href="/assets" class="btn btn-primary">Back</a>
+    </EditForm>
+}
+
+@code {
+    [Parameter]
+    public int Id { get; set; }
+
+    [SupplyParameterFromForm(FormName = "formAsset")]
+    private Asset? Asset { get; set; }
+
+    protected override void OnParametersSet()
+    {
+        Asset ??= AssetsRepository.GetAssetById(Id);
+
+        if (Asset == null)
+        {
+            NavigationManager.NavigateTo("/assets");
+        }
+    }
+
+    private void Submit()
+    {
+        if (Asset != null)
+        {
+            AssetsRepository.UpdateAsset(Asset.AssetId, Asset);
+        }
+        
+        NavigationManager.NavigateTo("/assets");
+    }
+
+}
