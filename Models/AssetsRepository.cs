@@ -67,8 +67,16 @@ public class AssetsRepository
 
     public static void AddAsset(Asset asset)
     {
-        var maxId = _assets.Max(a => a.AssetId);
-        asset.AssetId = maxId + 1;
-        _assets.Add(asset);
+        if (_assets.Count > 0)
+        {
+            var maxId = _assets.Max(a => a.AssetId);
+            asset.AssetId = maxId + 1;
+            _assets.Add(asset);
+        }
+        else
+        {
+            asset.AssetId = 1;
+            _assets.Add(asset);
+        }
     }
 }

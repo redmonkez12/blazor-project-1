@@ -16,4 +16,6 @@ public class Asset
     [Required]
     public int? CategoryId { get; set; }
 
+    public bool Liked { get; set; } = false;
+
 }
