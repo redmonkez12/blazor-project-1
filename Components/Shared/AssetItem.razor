@@ -7,15 +7,19 @@
 
     <div class="card-body vstack gap-4">
         <div>
-            <EditForm Model="Asset" FormName="@($"form-asset-like-{Asset.AssetId}")" class="position-absolute top-0 end-0 me-2 mt-2" OnSubmit="ChangeAssetStatus">
+            <EditForm Enhance="true" Model="Asset" FormName="@($"form-asset-like-{Asset.AssetId}")" class="position-absolute top-0 end-0 me-2 mt-2" OnSubmit="ChangeAssetStatus">
                 <button class="btn btn-link" type="submit">
-                    @if (Asset.Liked)
+                    @if (Asset.Liked == null)
                     {
-                        <i class="bi bi-hand-thumbs-down-fill"></i>
+                        <div>-</div>
+                    }
+                    else if (Asset.Liked == true)
+                    {
+                        <i class="bi bi-hand-thumbs-up-fill"></i>
                     }
                     else
                     {
-                        <i class="bi bi-hand-thumbs-up-fill"></i>
+                        <i class="bi bi-hand-thumbs-down-fill"></i>   
                     }
                 </button>
             </EditForm>
@@ -41,7 +45,14 @@
 
     private void ChangeAssetStatus()
     {
-        Asset.Liked = !Asset.Liked;
+        if (Asset.Liked == null)
+        {
+            Asset.Liked = true;
+        }
+        else
+        {
+            Asset.Liked = !Asset.Liked;   
+        }
     }
 
     private string GetImageName(string input)
