@@ -13,18 +13,7 @@
         </div>
     </div>
     
-    <div class="row">
-        <div class="col-4">
-            <div class="input-group mb-3">
-                <input type="text" class="form-control" placeholder="Search Assets" @bind-Value="@_assetFilter">
-                <button class="btn btn-primary" type="button" @onclick="SearchAssets">Search</button>
-            </div>
-        </div>
-        
-        <div class="col-1">
-            <button class="btn btn-secondary" @onclick="ResetFilter">Reset</button>
-        </div>
-    </div>
+    <SearchForm SearchAssets="SearchAssets" ResetFilter="ResetFilter" AssetFilter="@_assetFilter"/>
     
     <Categories SelectCategoryId="SelectCategory" SelectedCategory="_selectedCategoryId"/>
 
@@ -45,7 +34,7 @@
         {
             @foreach (var asset in _categoryAssets)
             {
-                <AssetItem @key="asset.AssetId" Asset="asset"/>
+                <AssetItem @key="asset.AssetId" Asset="asset" DeleteAsset="@(() => DeleteAsset(asset.AssetId))"/>
             }
         }
     </div>
@@ -72,8 +61,9 @@
         _assetFilter = "";
     }
 
-    private void SearchAssets()
+    private void SearchAssets(string searchText)
     {
+        _assetFilter = searchText;
         _filteredAssets = _categoryAssets.Where(s => s.Name.Contains(_assetFilter, StringComparison.OrdinalIgnoreCase)).ToList();
     }
 
@@ -83,6 +73,14 @@
         _assetFilter = "";
     }
 
+    private void DeleteAsset(int assetId)
+    {
+        if (assetId > 0)
+        {
+            AssetsRepository.DeleteAsset(assetId);
+        }
+    }
+    
     protected override void OnInitialized()
     {
         var uri = NavigationManager.ToAbsoluteUri(NavigationManager.Uri);

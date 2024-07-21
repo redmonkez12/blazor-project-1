@@ -16,15 +16,17 @@
 
         <div class="d-grid mt-auto gap-2">
             <a href="/assets/@Asset.AssetId" class="btn btn-primary">Edit</a>
-            <EditForm Model="Asset" FormName="@($"form-asset-{Asset.AssetId}")" OnValidSubmit="@(() => { DeleteAsset(Asset.AssetId); })">
-                <button type="submit" class="btn btn-danger w-100">Delete</button>
-            </EditForm>
+            <button type="submit" class="btn btn-danger w-100" @onclick="@(() => DeleteAsset.InvokeAsync())">Delete</button>
         </div>
     </div>
 </div>
 
 @code {
-    [Parameter] public required Asset Asset { get; set; }
+    [Parameter] 
+    public required Asset Asset { get; set; }
+
+    [Parameter]
+    public EventCallback DeleteAsset { get; set; }
 
     private string GetImageName(string input)
     {
@@ -35,14 +37,5 @@
 
         return input.Replace(" ", "_").ToLower();
     }
-
-    private void DeleteAsset(int assetId)
-    {
-        if (assetId > 0)
-        {
-            AssetsRepository.DeleteAsset(assetId);
-            NavigationManager.Refresh();
-        }
-    }
-
+    
 }
