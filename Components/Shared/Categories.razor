@@ -1,0 +1,28 @@
+@inject NavigationManager NavigationManager
+
+<div class="hstack gap-4 mb-3">
+    @foreach (var category in _categories)
+    {
+        <button
+            @key="category.CategoryId"
+            class="btn  @(SelectedCategory == category.CategoryId ? "btn-primary" : "btn-outline-primary")"
+            @onclick="() => SelectCategory(category.CategoryId)">@category.Name</button>
+    }
+</div>
+
+@code {
+    private readonly List<Category> _categories = CategoriesRepository.GetCategories();
+
+    [Parameter]
+    public EventCallback<int> SelectCategoryId { get; set; }
+
+    [Parameter]
+    public int SelectedCategory { get; set; }
+
+    private void SelectCategory(int categoryId)
+    {
+        SelectCategoryId.InvokeAsync(categoryId);
+        
+        NavigationManager.NavigateTo(NavigationManager.GetUriWithQueryParameter("categoryId", categoryId), false, true);
+    }
+}
